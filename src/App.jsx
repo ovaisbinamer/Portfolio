@@ -1,4 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
+import emailjs from '@emailjs/browser';
 import './App.css';
 
 const useElementOnScreen = (options) => {
@@ -63,6 +64,30 @@ const CursorGlow = () => {
 };
 
 function App() {
+  const formRef = useRef();
+  const [status, setStatus] = useState('');
+
+  const sendEmail = (e) => {
+    e.preventDefault();
+    setStatus('Sending...');
+
+    emailjs.sendForm(
+      import.meta.env.VITE_EMAILJS_SERVICE_ID,
+      import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+      formRef.current,
+      import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+    )
+    .then((result) => {
+        console.log(result.text);
+        setStatus('Message sent successfully!');
+        e.target.reset();
+        setTimeout(() => setStatus(''), 5000);
+    }, (error) => {
+        console.log(error.text);
+        setStatus('Failed to send message. Please ensure your VITE_ keys are set correctly.');
+    });
+  };
+
   return (
     <div className="app-container">
       <CursorGlow />
@@ -87,7 +112,6 @@ function App() {
               </p>
               <div className="hero-actions">
                 <a href="#projects" className="btn btn-primary">View Projects</a>
-                <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="btn btn-secondary">Resume</a>
                 <a href="#contact" className="btn btn-secondary">Get in Touch</a>
               </div>
             </div>
@@ -233,17 +257,18 @@ function App() {
                 I'm currently available for freelance work and open to new full-stack opportunities.
               </p>
               
-              <form className="contact-form" onSubmit={(e) => { e.preventDefault(); alert("Thanks for reaching out! EmailJS integration coming soon."); }}>
+              <form ref={formRef} className="contact-form" onSubmit={sendEmail}>
                 <div className="form-group">
-                  <input type="text" placeholder="Your Name" required className="form-input" />
+                  <input type="text" name="user_name" placeholder="Your Name" required className="form-input" />
                 </div>
                 <div className="form-group">
-                  <input type="email" placeholder="Your Email" required className="form-input" />
+                  <input type="email" name="user_email" placeholder="Your Email" required className="form-input" />
                 </div>
                 <div className="form-group">
-                  <textarea placeholder="Your Message" required className="form-input" rows="5"></textarea>
+                  <textarea name="message" placeholder="Your Message" required className="form-input" rows="5"></textarea>
                 </div>
                 <button type="submit" className="btn btn-primary" style={{width: '100%', marginTop: '1rem'}}>Send Message</button>
+                {status && <p className="text-secondary" style={{marginTop: '1rem', fontSize: '0.9rem'}}>{status}</p>}
               </form>
 
             </div>
