@@ -40,9 +40,32 @@ const FadeIn = ({ children, delay = 0 }) => {
   );
 };
 
+const CursorGlow = () => {
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setPosition({ x: e.clientX, y: e.clientY });
+    };
+    
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  return (
+    <div 
+      className="cursor-glow"
+      style={{
+        transform: `translate(${position.x}px, ${position.y}px)`
+      }}
+    />
+  );
+};
+
 function App() {
   return (
     <div className="app-container">
+      <CursorGlow />
       <nav className="navbar container">
         <div className="logo">Ovais.</div>
         <ul className="nav-links">
@@ -64,11 +87,51 @@ function App() {
               </p>
               <div className="hero-actions">
                 <a href="#projects" className="btn btn-primary">View Projects</a>
+                <a href="/resume.pdf" target="_blank" rel="noopener noreferrer" className="btn btn-secondary">Resume</a>
                 <a href="#contact" className="btn btn-secondary">Get in Touch</a>
               </div>
             </div>
           </section>
         </FadeIn>
+
+        <div className="marquee-container">
+          <div className="marquee-content">
+            {/* First Set */}
+            <span className="marquee-item">React</span>
+            <span className="marquee-item">•</span>
+            <span className="marquee-item">Node.js</span>
+            <span className="marquee-item">•</span>
+            <span className="marquee-item">Express</span>
+            <span className="marquee-item">•</span>
+            <span className="marquee-item">MongoDB</span>
+            <span className="marquee-item">•</span>
+            <span className="marquee-item">Next.js 15</span>
+            <span className="marquee-item">•</span>
+            <span className="marquee-item">Tailwind CSS</span>
+            <span className="marquee-item">•</span>
+            <span className="marquee-item">Stripe</span>
+            <span className="marquee-item">•</span>
+            <span className="marquee-item">Postgres</span>
+            <span className="marquee-item">•</span>
+            {/* Duplicate Set for Infinite Scroll Effect */}
+            <span className="marquee-item" aria-hidden="true">React</span>
+            <span className="marquee-item" aria-hidden="true">•</span>
+            <span className="marquee-item" aria-hidden="true">Node.js</span>
+            <span className="marquee-item" aria-hidden="true">•</span>
+            <span className="marquee-item" aria-hidden="true">Express</span>
+            <span className="marquee-item" aria-hidden="true">•</span>
+            <span className="marquee-item" aria-hidden="true">MongoDB</span>
+            <span className="marquee-item" aria-hidden="true">•</span>
+            <span className="marquee-item" aria-hidden="true">Next.js 15</span>
+            <span className="marquee-item" aria-hidden="true">•</span>
+            <span className="marquee-item" aria-hidden="true">Tailwind CSS</span>
+            <span className="marquee-item" aria-hidden="true">•</span>
+            <span className="marquee-item" aria-hidden="true">Stripe</span>
+            <span className="marquee-item" aria-hidden="true">•</span>
+            <span className="marquee-item" aria-hidden="true">Postgres</span>
+            <span className="marquee-item" aria-hidden="true">•</span>
+          </div>
+        </div>
 
         <FadeIn delay={100}>
           <section id="about" className="section container">
@@ -169,7 +232,20 @@ function App() {
               <p className="text-secondary text-center" style={{marginBottom: '2.5rem', marginInline: 'auto'}}>
                 I'm currently available for freelance work and open to new full-stack opportunities.
               </p>
-              <a href="mailto:hello@example.com" className="btn btn-primary">Say Hello</a>
+              
+              <form className="contact-form" onSubmit={(e) => { e.preventDefault(); alert("Thanks for reaching out! EmailJS integration coming soon."); }}>
+                <div className="form-group">
+                  <input type="text" placeholder="Your Name" required className="form-input" />
+                </div>
+                <div className="form-group">
+                  <input type="email" placeholder="Your Email" required className="form-input" />
+                </div>
+                <div className="form-group">
+                  <textarea placeholder="Your Message" required className="form-input" rows="5"></textarea>
+                </div>
+                <button type="submit" className="btn btn-primary" style={{width: '100%', marginTop: '1rem'}}>Send Message</button>
+              </form>
+
             </div>
           </section>
         </FadeIn>
