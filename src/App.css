@@ -276,11 +276,36 @@
 }
 
 @media (max-width: 768px) {
+  .navbar {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem;
+  }
+  .hero-title {
+    font-size: 2.2rem;
+  }
+  .hero-subtitle {
+    font-size: 1rem;
+  }
   .hero-actions {
     flex-direction: column;
     width: 100%;
   }
   .btn { width: 100%; }
+  
+  .section {
+    padding: 4rem 1.5rem;
+  }
+  .section-title {
+    font-size: 2rem;
+  }
+  .about-content {
+    padding: 2.5rem 1.5rem;
+  }
+  .contact-card {
+    padding: 2.5rem 1.5rem;
+  }
   
   .footer {
     flex-direction: column;

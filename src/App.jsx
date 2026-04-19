@@ -107,7 +107,8 @@ function App() {
                     <span className="tag">Stripe</span>
                   </div>
                   <div className="project-links">
-                    <a href="https://github.com/ovais/agileflow" className="link-hover">GitHub ↗</a>
+                    <a href="https://agileflow-weld.vercel.app" target="_blank" rel="noopener noreferrer" className="link-hover">Live Demo ↗</a>
+                    <a href="https://github.com/ovaisbinamer/agileflow" target="_blank" rel="noopener noreferrer" className="link-hover">GitHub ↗</a>
                   </div>
                 </div>
               </div>
@@ -129,7 +130,8 @@ function App() {
                     <span className="tag" style={{borderColor: 'rgba(139, 92, 246, 0.2)', color: '#8b5cf6', background: 'rgba(139, 92, 246, 0.1)'}}>Stripe</span>
                   </div>
                   <div className="project-links">
-                    <a href="https://github.com/ovais/freshbakes-ecommerce" className="link-hover">GitHub ↗</a>
+                    <a href="https://freshbakes-ecommerce.vercel.app" target="_blank" rel="noopener noreferrer" className="link-hover">Live Demo ↗</a>
+                    <a href="https://github.com/ovaisbinamer/freshbakes-ecommerce" target="_blank" rel="noopener noreferrer" className="link-hover">GitHub ↗</a>
                   </div>
                 </div>
               </div>
@@ -150,7 +152,8 @@ function App() {
                     <span className="tag" style={{borderColor: 'rgba(168, 85, 247, 0.2)', color: '#a855f7', background: 'rgba(168, 85, 247, 0.1)'}}>Tailwind</span>
                   </div>
                   <div className="project-links">
-                    <a href="https://github.com/ovais/res-ai-website" className="link-hover">GitHub ↗</a>
+                    <a href="https://res-ai-dusky.vercel.app" target="_blank" rel="noopener noreferrer" className="link-hover">Live Demo ↗</a>
+                    <a href="https://github.com/ovaisbinamer/res-ai-website" target="_blank" rel="noopener noreferrer" className="link-hover">GitHub ↗</a>
                   </div>
                 </div>
               </div>
@@ -173,10 +176,9 @@ function App() {
       </main>
       
       <footer className="footer container">
-        <p className="text-secondary">© 2026 Ovais. Built with React.</p>
-        <div className="footer-links">
-          <a href="#">GitHub</a>
-          <a href="#">LinkedIn</a>
+        <div className="footer-links" style={{margin: '0 auto'}}>
+          <a href="https://github.com/ovaisbinamer" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://linkedin.com/in/ovaisbinamer" target="_blank" rel="noopener noreferrer">LinkedIn</a>
         </div>
       </footer>
     </div>
