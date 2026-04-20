@@ -1,66 +1,86 @@
 import React, { useRef, useState, useEffect } from 'react';
 import emailjs from '@emailjs/browser';
+import { motion, useSpring, useMotionValue, useTransform } from 'framer-motion';
 import './App.css';
 
-const useElementOnScreen = (options) => {
-  const containerRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        setIsVisible(true);
-        observer.unobserve(entry.target);
-      }
-    }, options);
-    
-    if (containerRef.current) observer.observe(containerRef.current);
-    
-    return () => {
-      if (containerRef.current) observer.unobserve(containerRef.current);
-    }
-  }, [containerRef, options]);
+const TiltCard = ({ children, className, variants }) => {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
 
-  return [containerRef, isVisible];
-};
+  const mouseXSpring = useSpring(x, { stiffness: 300, damping: 30 });
+  const mouseYSpring = useSpring(y, { stiffness: 300, damping: 30 });
 
-const FadeIn = ({ children, delay = 0 }) => {
-  const [ref, isVisible] = useElementOnScreen({
-    threshold: 0.1,
-    rootMargin: "0px 0px -50px 0px"
-  });
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["10deg", "-10deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-10deg", "10deg"]);
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    x.set(mouseX / width - 0.5);
+    y.set(mouseY / height - 0.5);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
 
   return (
-    <div 
-      ref={ref} 
-      className={`fade-in-section ${isVisible ? 'is-visible' : ''}`}
-      style={{ transitionDelay: `${delay}ms` }}
+    <motion.div
+      className={className}
+      variants={variants}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        rotateX,
+        rotateY,
+        transformStyle: "preserve-3d",
+      }}
+      whileHover={{ scale: 1.02 }}
+      transition={{ type: "spring", stiffness: 400, damping: 30 }}
     >
       {children}
-    </div>
+    </motion.div>
   );
 };
 
-const CursorGlow = () => {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+const fadeInUp = {
+  hidden: { opacity: 0, y: 50 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
+};
 
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      setPosition({ x: e.clientX, y: e.clientY });
-    };
-    
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15
+    }
+  }
+};
 
-  return (
-    <div 
-      className="cursor-glow"
-      style={{
-        transform: `translate(${position.x}px, ${position.y}px)`
-      }}
-    />
-  );
+const titleWordVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { type: "spring", damping: 15, stiffness: 200 } }
+};
+
+const projectVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
+};
+
+const formStagger = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
 };
 
 function App() {
@@ -88,37 +108,82 @@ function App() {
     });
   };
 
+  const heroWords = ["Crafting", "Digital", "Experiences"];
+
   return (
     <div className="app-container">
-      <CursorGlow />
       <nav className="navbar container">
-        <div className="logo">Ovais.</div>
-        <ul className="nav-links">
-          <li><a href="#about">About</a></li>
-          <li><a href="#projects">Projects</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="logo"
+        >
+          Ovais.
+        </motion.div>
+        <motion.ul 
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="nav-links"
+        >
+          <li><motion.a href="#about" whileHover={{ color: '#8b5cf6' }}>About</motion.a></li>
+          <li><motion.a href="#projects" whileHover={{ color: '#8b5cf6' }}>Projects</motion.a></li>
+          <li><motion.a href="#contact" whileHover={{ color: '#8b5cf6' }}>Contact</motion.a></li>
+        </motion.ul>
       </nav>
 
       <main>
-        <FadeIn delay={0}>
-          <section id="hero" className="hero container">
-            <div className="hero-content">
-              <h1 className="hero-title">
-                Crafting <span className="accent-gradient">Digital Experiences</span>
-              </h1>
-              <p className="hero-subtitle">
-                Hi, I'm Ovais. A passionate Full-Stack Developer building modern, high-performance web applications.
-              </p>
-              <div className="hero-actions">
-                <a href="#projects" className="btn btn-primary">View Projects</a>
-                <a href="#contact" className="btn btn-secondary">Get in Touch</a>
-              </div>
-            </div>
-          </section>
-        </FadeIn>
+        <motion.section 
+          id="hero" 
+          className="hero container"
+          initial="hidden"
+          animate="visible"
+          variants={staggerContainer}
+        >
+          <div className="hero-content">
+            <motion.h1 className="hero-title" variants={staggerContainer}>
+              {heroWords.map((word, i) => (
+                <motion.span 
+                  key={i} 
+                  variants={titleWordVariants}
+                  style={{ display: 'inline-block', marginRight: '0.3em' }}
+                  className={i > 0 ? "accent-gradient" : ""}
+                >
+                  {word}
+                </motion.span>
+              ))}
+            </motion.h1>
+            <motion.p className="hero-subtitle" variants={fadeInUp}>
+              Hi, I'm Ovais. A passionate Full-Stack Developer building modern, high-performance web applications.
+            </motion.p>
+            <motion.div className="hero-actions" variants={fadeInUp}>
+              <motion.a 
+                href="#projects" 
+                className="btn btn-primary"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                View Projects
+              </motion.a>
+              <motion.a 
+                href="#contact" 
+                className="btn btn-secondary"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Get in Touch
+              </motion.a>
+            </motion.div>
+          </div>
+        </motion.section>
 
-        <div className="marquee-container">
+        <motion.div 
+          className="marquee-container"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.5 }}
+        >
           <div className="marquee-content">
             {/* First Set */}
             <span className="marquee-item">React</span>
@@ -155,125 +220,160 @@ function App() {
             <span className="marquee-item" aria-hidden="true">Postgres</span>
             <span className="marquee-item" aria-hidden="true">•</span>
           </div>
-        </div>
+        </motion.div>
 
-        <FadeIn delay={100}>
-          <section id="about" className="section container">
-            <h2 className="section-title">About Me</h2>
-            <div className="about-content">
-              <p className="text-secondary text-center">
-                I am a web developer with expertise in React, Node.js, Express, and modern CSS frameworks. 
-                I love turning complex problems into simple, beautiful, and intuitive designs. 
-                Whether it's building a fast frontend or a scalable backend architecture, I'm always up for the challenge.
-              </p>
-            </div>
-          </section>
-        </FadeIn>
+        <motion.section 
+          id="about" 
+          className="section container"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={fadeInUp}
+        >
+          <h2 className="section-title">About Me</h2>
+          <div className="about-content">
+            <p className="text-secondary text-center">
+              I am a web developer with expertise in React, Node.js, Express, and modern CSS frameworks. 
+              I love turning complex problems into simple, beautiful, and intuitive designs. 
+              Whether it's building a fast frontend or a scalable backend architecture, I'm always up for the challenge.
+            </p>
+          </div>
+        </motion.section>
 
-        <FadeIn delay={100}>
-          <section id="projects" className="section container">
-            <h2 className="section-title">Selected Projects</h2>
+        <motion.section 
+          id="projects" 
+          className="section container"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+        >
+          <motion.h2 variants={fadeInUp} className="section-title">Selected Projects</motion.h2>
+          
+          <div className="projects-grid">
+            {/* AgileFlow Project Card */}
+            <TiltCard variants={projectVariants} className="project-card">
+              <div className="project-image-placeholder">
+                <img src="/agileflow.png" alt="AgileFlow Project Preview" className="project-image" onError={(e) => {e.target.style.display='none'; e.target.nextSibling.style.display='block';}} />
+                <span className="accent-gradient fallback-text" style={{fontSize: '2rem', fontWeight: 'bold', display: 'none'}}>AgileFlow</span>
+              </div>
+              <div className="project-info">
+                <h3>AgileFlow</h3>
+                <p className="text-secondary text-left">
+                  Real-time Kanban board with task editing, team invites, and Stripe payments. 
+                  Built with React, Express, Socket.io, and MongoDB to deliver a seamless collaborative experience.
+                </p>
+                <div className="project-tags">
+                  <span className="tag">React</span>
+                  <span className="tag">Express</span>
+                  <span className="tag">Socket.io</span>
+                  <span className="tag">MongoDB</span>
+                  <span className="tag">Stripe</span>
+                </div>
+                <div className="project-links">
+                  <a href="https://agileflow-weld.vercel.app" target="_blank" rel="noopener noreferrer" className="link-hover">Live Demo ↗</a>
+                  <a href="https://github.com/ovaisbinamer/agileflow" target="_blank" rel="noopener noreferrer" className="link-hover">GitHub ↗</a>
+                </div>
+              </div>
+            </TiltCard>
             
-            <div className="projects-grid">
-              {/* AgileFlow Project Card */}
-              <div className="project-card">
-                <div className="project-image-placeholder">
-                  <span className="accent-gradient" style={{fontSize: '2rem', fontWeight: 'bold'}}>AgileFlow</span>
+            {/* Fresh Bakes Project Card */}
+            <TiltCard variants={projectVariants} className="project-card">
+              <div className="project-image-placeholder">
+                <img src="/freshbakes.png" alt="FreshBakes Project Preview" className="project-image" onError={(e) => {e.target.style.display='none'; e.target.nextSibling.style.display='block';}} />
+                <span className="accent-gradient fallback-text" style={{fontSize: '2rem', fontWeight: 'bold', filter: 'hue-rotate(45deg)', display: 'none'}}>FreshBakes</span>
+              </div>
+              <div className="project-info">
+                <h3>Fresh Bakes E-Commerce</h3>
+                <p className="text-secondary text-left">
+                  A premium Full-Stack Bakery E-commerce platform featuring a complete shopping experience with secure payments and data management.
+                </p>
+                <div className="project-tags">
+                  <span className="tag" style={{borderColor: 'rgba(250, 204, 21, 0.2)', color: '#facc15', background: 'rgba(250, 204, 21, 0.1)'}}>Next.js 15</span>
+                  <span className="tag" style={{borderColor: 'rgba(56, 189, 248, 0.2)', color: '#38bdf8', background: 'rgba(56, 189, 248, 0.1)'}}>TypeScript</span>
+                  <span className="tag" style={{borderColor: 'rgba(34, 197, 94, 0.2)', color: '#22c55e', background: 'rgba(34, 197, 94, 0.1)'}}>Supabase</span>
+                  <span className="tag" style={{borderColor: 'rgba(139, 92, 246, 0.2)', color: '#8b5cf6', background: 'rgba(139, 92, 246, 0.1)'}}>Stripe</span>
                 </div>
-                <div className="project-info">
-                  <h3>AgileFlow</h3>
-                  <p className="text-secondary text-left">
-                    Real-time Kanban board with task editing, team invites, and Stripe payments. 
-                    Built with React, Express, Socket.io, and MongoDB to deliver a seamless collaborative experience.
-                  </p>
-                  <div className="project-tags">
-                    <span className="tag">React</span>
-                    <span className="tag">Express</span>
-                    <span className="tag">Socket.io</span>
-                    <span className="tag">MongoDB</span>
-                    <span className="tag">Stripe</span>
-                  </div>
-                  <div className="project-links">
-                    <a href="https://agileflow-weld.vercel.app" target="_blank" rel="noopener noreferrer" className="link-hover">Live Demo ↗</a>
-                    <a href="https://github.com/ovaisbinamer/agileflow" target="_blank" rel="noopener noreferrer" className="link-hover">GitHub ↗</a>
-                  </div>
+                <div className="project-links">
+                  <a href="https://freshbakes-ecommerce.vercel.app" target="_blank" rel="noopener noreferrer" className="link-hover">Live Demo ↗</a>
+                  <a href="https://github.com/ovaisbinamer/freshbakes-ecommerce" target="_blank" rel="noopener noreferrer" className="link-hover">GitHub ↗</a>
                 </div>
               </div>
-              
-              {/* Fresh Bakes Project Card */}
-              <div className="project-card">
-                <div className="project-image-placeholder">
-                  <span className="accent-gradient" style={{fontSize: '2rem', fontWeight: 'bold', filter: 'hue-rotate(45deg)'}}>FreshBakes</span>
+            </TiltCard>
+
+            {/* Res AI Project Card */}
+            <TiltCard variants={projectVariants} className="project-card">
+              <div className="project-image-placeholder">
+                <img src="/res-ai.png" alt="Res AI Project Preview" className="project-image" onError={(e) => {e.target.style.display='none'; e.target.nextSibling.style.display='block';}} />
+                <span className="accent-gradient fallback-text" style={{fontSize: '2rem', fontWeight: 'bold', filter: 'hue-rotate(120deg)', display: 'none'}}>Res AI</span>
+              </div>
+              <div className="project-info">
+                <h3>Res AI</h3>
+                <p className="text-secondary text-left">
+                  A modern, interactive frontend interface design for an AI service featuring sleek animations and a captivating user experience.
+                </p>
+                <div className="project-tags">
+                  <span className="tag" style={{borderColor: 'rgba(251, 191, 36, 0.2)', color: '#fbbf24', background: 'rgba(251, 191, 36, 0.1)'}}>JavaScript</span>
+                  <span className="tag" style={{borderColor: 'rgba(236, 72, 153, 0.2)', color: '#ec4899', background: 'rgba(236, 72, 153, 0.1)'}}>React</span>
+                  <span className="tag" style={{borderColor: 'rgba(168, 85, 247, 0.2)', color: '#a855f7', background: 'rgba(168, 85, 247, 0.1)'}}>Tailwind</span>
                 </div>
-                <div className="project-info">
-                  <h3>Fresh Bakes E-Commerce</h3>
-                  <p className="text-secondary text-left">
-                    A premium Full-Stack Bakery E-commerce platform featuring a complete shopping experience with secure payments and data management.
-                  </p>
-                  <div className="project-tags">
-                    <span className="tag" style={{borderColor: 'rgba(250, 204, 21, 0.2)', color: '#facc15', background: 'rgba(250, 204, 21, 0.1)'}}>Next.js 15</span>
-                    <span className="tag" style={{borderColor: 'rgba(56, 189, 248, 0.2)', color: '#38bdf8', background: 'rgba(56, 189, 248, 0.1)'}}>TypeScript</span>
-                    <span className="tag" style={{borderColor: 'rgba(34, 197, 94, 0.2)', color: '#22c55e', background: 'rgba(34, 197, 94, 0.1)'}}>Supabase</span>
-                    <span className="tag" style={{borderColor: 'rgba(139, 92, 246, 0.2)', color: '#8b5cf6', background: 'rgba(139, 92, 246, 0.1)'}}>Stripe</span>
-                  </div>
-                  <div className="project-links">
-                    <a href="https://freshbakes-ecommerce.vercel.app" target="_blank" rel="noopener noreferrer" className="link-hover">Live Demo ↗</a>
-                    <a href="https://github.com/ovaisbinamer/freshbakes-ecommerce" target="_blank" rel="noopener noreferrer" className="link-hover">GitHub ↗</a>
-                  </div>
+                <div className="project-links">
+                  <a href="https://res-ai-dusky.vercel.app" target="_blank" rel="noopener noreferrer" className="link-hover">Live Demo ↗</a>
+                  <a href="https://github.com/ovaisbinamer/res-ai-website" target="_blank" rel="noopener noreferrer" className="link-hover">GitHub ↗</a>
                 </div>
               </div>
+            </TiltCard>
+            
+          </div>
+        </motion.section>
 
-              {/* Res AI Project Card */}
-              <div className="project-card">
-                <div className="project-image-placeholder">
-                  <span className="accent-gradient" style={{fontSize: '2rem', fontWeight: 'bold', filter: 'hue-rotate(120deg)'}}>Res AI</span>
-                </div>
-                <div className="project-info">
-                  <h3>Res AI</h3>
-                  <p className="text-secondary text-left">
-                    A modern, interactive frontend interface design for an AI service featuring sleek animations and a captivating user experience.
-                  </p>
-                  <div className="project-tags">
-                    <span className="tag" style={{borderColor: 'rgba(251, 191, 36, 0.2)', color: '#fbbf24', background: 'rgba(251, 191, 36, 0.1)'}}>JavaScript</span>
-                    <span className="tag" style={{borderColor: 'rgba(236, 72, 153, 0.2)', color: '#ec4899', background: 'rgba(236, 72, 153, 0.1)'}}>React</span>
-                    <span className="tag" style={{borderColor: 'rgba(168, 85, 247, 0.2)', color: '#a855f7', background: 'rgba(168, 85, 247, 0.1)'}}>Tailwind</span>
-                  </div>
-                  <div className="project-links">
-                    <a href="https://res-ai-dusky.vercel.app" target="_blank" rel="noopener noreferrer" className="link-hover">Live Demo ↗</a>
-                    <a href="https://github.com/ovaisbinamer/res-ai-website" target="_blank" rel="noopener noreferrer" className="link-hover">GitHub ↗</a>
-                  </div>
-                </div>
-              </div>
-              
-            </div>
-          </section>
-        </FadeIn>
+        <motion.section 
+          id="contact" 
+          className="section container"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={fadeInUp}
+        >
+          <div className="contact-card">
+            <h2 className="section-title" style={{marginBottom: '1rem'}}>Let's Work Together</h2>
+            <p className="text-secondary text-center" style={{marginBottom: '2.5rem', marginInline: 'auto'}}>
+              I'm currently available for freelance work and open to new full-stack opportunities.
+            </p>
+            
+            <motion.form 
+              ref={formRef} 
+              className="contact-form" 
+              onSubmit={sendEmail}
+              variants={formStagger}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-50px" }}
+            >
+              <motion.div className="form-group" variants={fadeInUp}>
+                <input type="text" name="user_name" placeholder="Your Name" required className="form-input" />
+              </motion.div>
+              <motion.div className="form-group" variants={fadeInUp}>
+                <input type="email" name="user_email" placeholder="Your Email" required className="form-input" />
+              </motion.div>
+              <motion.div className="form-group" variants={fadeInUp}>
+                <textarea name="message" placeholder="Your Message" required className="form-input" rows="5"></textarea>
+              </motion.div>
+              <motion.button 
+                type="submit" 
+                className="btn btn-primary" 
+                style={{width: '100%', marginTop: '1rem'}}
+                variants={fadeInUp}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                Send Message
+              </motion.button>
+              {status && <p className="text-secondary" style={{marginTop: '1rem', fontSize: '0.9rem'}}>{status}</p>}
+            </motion.form>
 
-        <FadeIn delay={100}>
-          <section id="contact" className="section container">
-            <div className="contact-card">
-              <h2 className="section-title" style={{marginBottom: '1rem'}}>Let's Work Together</h2>
-              <p className="text-secondary text-center" style={{marginBottom: '2.5rem', marginInline: 'auto'}}>
-                I'm currently available for freelance work and open to new full-stack opportunities.
-              </p>
-              
-              <form ref={formRef} className="contact-form" onSubmit={sendEmail}>
-                <div className="form-group">
-                  <input type="text" name="user_name" placeholder="Your Name" required className="form-input" />
-                </div>
-                <div className="form-group">
-                  <input type="email" name="user_email" placeholder="Your Email" required className="form-input" />
-                </div>
-                <div className="form-group">
-                  <textarea name="message" placeholder="Your Message" required className="form-input" rows="5"></textarea>
-                </div>
-                <button type="submit" className="btn btn-primary" style={{width: '100%', marginTop: '1rem'}}>Send Message</button>
-                {status && <p className="text-secondary" style={{marginTop: '1rem', fontSize: '0.9rem'}}>{status}</p>}
-              </form>
-
-            </div>
-          </section>
-        </FadeIn>
+          </div>
+        </motion.section>
       </main>
       
       <footer className="footer container">
