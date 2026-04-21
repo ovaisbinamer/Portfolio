@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
 
-:root {
-  /* Colors */
+:root, [data-theme='dark'] {
+  /* Dark Mode Colors */
   --bg-primary: #0a0a0a;
   --bg-secondary: #141414;
   --bg-tertiary: #1f1f1f;
@@ -10,20 +10,40 @@
   --text-secondary: #a3a3a3;
   --text-tertiary: #737373;
   
-  /* Accent Colors (Vibrant Neon Cyan/Blue/Purple) */
-  --accent-primary: #3b82f6; /* Blue */
-  --accent-secondary: #8b5cf6; /* Purple */
-  --accent-tertiary: #06b6d4; /* Cyan */
+  --accent-primary: #3b82f6;
+  --accent-secondary: #8b5cf6;
   
   --gradient-accent: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
   --gradient-text: linear-gradient(135deg, #fff 0%, #a3a3a3 100%);
   
   --border-color: rgba(255, 255, 255, 0.1);
   --border-hover: rgba(255, 255, 255, 0.2);
+  --card-bg: rgba(255, 255, 255, 0.03);
 
   /* Typography */
   --font-sans: 'Inter', sans-serif;
   --font-heading: 'Outfit', sans-serif;
+}
+
+[data-theme='light'] {
+  /* Light Mode Colors */
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f1f5f9;
+  
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-tertiary: #64748b;
+  
+  --accent-primary: #2563eb;
+  --accent-secondary: #7c3aed;
+  
+  --gradient-accent: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+  --gradient-text: linear-gradient(135deg, #0f172a 0%, #475569 100%);
+  
+  --border-color: rgba(0, 0, 0, 0.08);
+  --border-hover: rgba(0, 0, 0, 0.15);
+  --card-bg: rgba(255, 255, 255, 1);
 }
 
 * {

@@ -88,6 +88,14 @@ function App() {
   const [status, setStatus] = useState('');
   const [activeTab, setActiveTab] = useState('experience');
   const [activeFaq, setActiveFaq] = useState(null);
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => setTheme(theme === 'light' ? 'dark' : 'light');
 
   const sendEmail = (e) => {
     e.preventDefault();
@@ -115,7 +123,7 @@ function App() {
   return (
     <div className="app-container">
       <motion.div 
-        className="floating-status glass-card"
+        className="floating-status solid-card"
         initial={{ y: 100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 1, type: "spring" }}
@@ -142,6 +150,11 @@ function App() {
           <li><motion.a href="#about" whileHover={{ color: '#8b5cf6' }}>About</motion.a></li>
           <li><motion.a href="#projects" whileHover={{ color: '#8b5cf6' }}>Projects</motion.a></li>
           <li><motion.a href="#contact" whileHover={{ color: '#8b5cf6' }}>Contact</motion.a></li>
+          <li style={{display: 'flex', alignItems: 'center'}}>
+            <button onClick={toggleTheme} className="theme-toggle" aria-label="Toggle Theme">
+              {theme === 'light' ? '🌙' : '☀️'}
+            </button>
+          </li>
         </motion.ul>
       </nav>
 
@@ -155,19 +168,15 @@ function App() {
         >
           <div className="hero-content">
             <motion.h1 className="hero-title" variants={staggerContainer}>
-              {heroWords.map((word, i) => (
                 <motion.span 
-                  key={i} 
                   variants={titleWordVariants}
-                  style={{ display: 'inline-block', marginRight: '0.3em' }}
-                  className={i > 0 ? "accent-gradient" : ""}
+                  className="accent-gradient"
                 >
-                  {word}
+                  Software Developer
                 </motion.span>
-              ))}
             </motion.h1>
             <motion.p className="hero-subtitle" variants={fadeInUp}>
-              Hi, I'm Ovais. A passionate Full-Stack Developer building modern, high-performance web applications.
+              Hi, I'm Ovais. A computer science student and developer focused on building clean, practical web applications.
             </motion.p>
             <motion.div className="hero-actions" variants={fadeInUp}>
               <motion.a 
@@ -243,11 +252,11 @@ function App() {
           variants={fadeInUp}
         >
           <h2 className="section-title">About Me</h2>
-          <div className="about-content">
+          <div className="about-content solid-card">
             <p className="text-secondary text-center">
-              I am a web developer with expertise in React, Node.js, Express, and modern CSS frameworks. 
-              I love turning complex problems into simple, beautiful, and intuitive designs. 
-              Whether it's building a fast frontend or a scalable backend architecture, I'm always up for the challenge.
+              I'm a BSCS student at Bahria University who loves building things for the web. 
+              I work primarily with React and Node.js to create platforms that solve real problems. 
+              Whether it's building a straightforward frontend or setting up a reliable backend database, I enjoy the entire development process.
             </p>
           </div>
         </motion.section>
@@ -261,7 +270,7 @@ function App() {
           variants={fadeInUp}
         >
           <h2 className="section-title">Resume</h2>
-          <div className="resume-container glass-card">
+          <div className="resume-container solid-card">
             <div className="resume-tabs">
               <button 
                 className={`tab-btn ${activeTab === 'experience' ? 'active' : ''}`}
@@ -292,9 +301,9 @@ function App() {
                       <span className="accent-gradient date-badge">2023 - Present</span>
                     </div>
                     <p className="text-secondary text-left">
-                      Designed and built high-performance web applications using React, Next.js, and Node.js. 
-                      Collaborated with clients to deliver full-scale MVPs including E-Commerce platforms and SaaS tools. 
-                      Focused on responsive design, modern animations, and scalable backend architectures.
+                      Built full-stack web applications using React, Next.js, and Node.js. 
+                      Worked directly with clients to deliver MVPs including e-commerce platforms and productivity tools. 
+                      Prioritized responsive layouts and maintainable database schemas.
                     </p>
                   </motion.div>
                 )}
@@ -313,8 +322,8 @@ function App() {
                     </div>
                     <p className="text-primary text-left" style={{fontWeight: '600', marginBottom: '1rem'}}>Bahria University</p>
                     <p className="text-secondary text-left">
-                      Core coursework in Data Structures, Algorithms, Web Development, and Software Engineering.
-                      Actively participating in coding hackathons and building practical side projects.
+                      Core coursework in Data Structures, Web Development, and Software Engineering.
+                      Actively participating in coding projects to apply these theoretical concepts practically.
                     </p>
                   </motion.div>
                 )}
@@ -333,10 +342,10 @@ function App() {
         >
           <motion.h2 variants={fadeInUp} className="section-title">My Tech Stack</motion.h2>
           <div className="skills-bento-grid">
-            <motion.div variants={projectVariants} className="bento-card glass-card">
+            <motion.div variants={projectVariants} className="bento-card solid-card">
               <div className="bento-icon">💻</div>
               <h3>Frontend</h3>
-              <p className="text-secondary text-sm">Building highly responsive, animated interfaces.</p>
+              <p className="text-secondary text-sm">Building accessible and responsive user interfaces.</p>
               <div className="bento-tags">
                 <span>React</span>
                 <span>Next.js 15</span>
@@ -345,10 +354,10 @@ function App() {
               </div>
             </motion.div>
             
-            <motion.div variants={projectVariants} className="bento-card glass-card">
+            <motion.div variants={projectVariants} className="bento-card solid-card">
               <div className="bento-icon">⚙️</div>
               <h3>Backend</h3>
-              <p className="text-secondary text-sm">Scalable logic and API development.</p>
+              <p className="text-secondary text-sm">Developing scalable logic and APIs.</p>
               <div className="bento-tags">
                 <span>Node.js</span>
                 <span>Express</span>
@@ -356,10 +365,10 @@ function App() {
               </div>
             </motion.div>
             
-            <motion.div variants={projectVariants} className="bento-card glass-card span-2">
+            <motion.div variants={projectVariants} className="bento-card solid-card span-2">
               <div className="bento-icon">🗄️</div>
-              <h3>Databases & Architecture</h3>
-              <p className="text-secondary text-sm">Handling complex data modeling, secure payments, and reliable version control for production apps.</p>
+              <h3>Databases & Tools</h3>
+              <p className="text-secondary text-sm">Handling data management and deployment workflows.</p>
               <div className="bento-tags">
                 <span>MongoDB</span>
                 <span>PostgreSQL</span>
@@ -380,25 +389,25 @@ function App() {
         >
           <motion.h2 variants={fadeInUp} className="section-title">My Services</motion.h2>
           <div className="services-grid">
-            <motion.div variants={projectVariants} className="service-card glass-card">
+            <motion.div variants={projectVariants} className="service-card solid-card">
               <div className="service-icon">💻</div>
               <h3>Full-Stack Development</h3>
               <p className="text-secondary text-left">
-                End-to-end web application development. From database architecture to beautiful frontend interfaces using modern stacks like Next.js and Node.
+                Building web applications from the ground up using React and Node.js ecosystems.
               </p>
             </motion.div>
-            <motion.div variants={projectVariants} className="service-card glass-card">
+            <motion.div variants={projectVariants} className="service-card solid-card">
               <div className="service-icon">🎨</div>
-              <h3>Modern UI/UX Design</h3>
+              <h3>Frontend Development</h3>
               <p className="text-secondary text-left">
-                Translating ideas into visually stunning, user-friendly designs. Implementing glassmorphism, smooth animations, and responsive layouts.
+                Creating responsive, accessible, and fast user interfaces with modern CSS frameworks.
               </p>
             </motion.div>
-            <motion.div variants={projectVariants} className="service-card glass-card">
+            <motion.div variants={projectVariants} className="service-card solid-card">
               <div className="service-icon">⚙️</div>
-              <h3>API & Integration</h3>
+              <h3>Backend & APIs</h3>
               <p className="text-secondary text-left">
-                Building robust RESTful APIs and seamlessly integrating third-party services like Stripe, Supabase, and real-time WebSockets.
+                Setting up databases, REST APIs, and simple payment integrations using Stripe.
               </p>
             </motion.div>
           </div>
@@ -424,8 +433,8 @@ function App() {
               <div className="project-info">
                 <h3>AgileFlow</h3>
                 <p className="text-secondary text-left">
-                  Real-time Kanban board with task editing, team invites, and Stripe payments. 
-                  Built with React, Express, Socket.io, and MongoDB to deliver a seamless collaborative experience.
+                  A Kanban board application with task editing, team invites, and Stripe payments. 
+                  Built with React, Express, and MongoDB.
                 </p>
                 <div className="project-tags">
                   <span className="tag">React</span>
@@ -450,7 +459,7 @@ function App() {
               <div className="project-info">
                 <h3>Fresh Bakes E-Commerce</h3>
                 <p className="text-secondary text-left">
-                  A premium Full-Stack Bakery E-commerce platform featuring a complete shopping experience with secure payments and data management.
+                  A full-stack e-commerce platform mapping products securely with managed checkout capabilities.
                 </p>
                 <div className="project-tags">
                   <span className="tag" style={{borderColor: 'rgba(250, 204, 21, 0.2)', color: '#facc15', background: 'rgba(250, 204, 21, 0.1)'}}>Next.js 15</span>
@@ -474,7 +483,7 @@ function App() {
               <div className="project-info">
                 <h3>Res AI</h3>
                 <p className="text-secondary text-left">
-                  A modern, interactive frontend interface design for an AI service featuring sleek animations and a captivating user experience.
+                  A modern frontend interface designed for an AI service highlighting standard CSS layouts and standard component structures.
                 </p>
                 <div className="project-tags">
                   <span className="tag" style={{borderColor: 'rgba(251, 191, 36, 0.2)', color: '#fbbf24', background: 'rgba(251, 191, 36, 0.1)'}}>JavaScript</span>
@@ -501,28 +510,28 @@ function App() {
         >
           <motion.h2 variants={fadeInUp} className="section-title">Why Work With Me</motion.h2>
           <div className="values-grid">
-            <motion.div variants={projectVariants} className="value-card glass-card">
-              <h3>🚀 Ready & Available</h3>
+            <motion.div variants={projectVariants} className="value-card solid-card">
+              <h3>Availability</h3>
               <p className="text-secondary text-left">
-                I am actively taking on new clients and freelance projects. Whether you need a full-scale MVP or a quick frontend overhaul, I'm ready to build.
+                I am currently taking on freelance projects and open to joining development teams.
               </p>
             </motion.div>
-            <motion.div variants={projectVariants} className="value-card glass-card">
-              <h3>⏱️ Timely & Punctual</h3>
+            <motion.div variants={projectVariants} className="value-card solid-card">
+              <h3>Punctuality</h3>
               <p className="text-secondary text-left">
-                I strictly value your time and deadlines. I set realistic timelines, communicate progress proactively, and consistently deliver on schedule.
+                I focus on realistic scheduling and tracking my time effectively to ensure deadlines are met.
               </p>
             </motion.div>
-            <motion.div variants={projectVariants} className="value-card glass-card">
-              <h3>💬 Clear Communication</h3>
+            <motion.div variants={projectVariants} className="value-card solid-card">
+              <h3>Communication</h3>
               <p className="text-secondary text-left">
-                Zero ghosting, zero tech jargon (unless you want it). I prioritize keeping you heavily involved and informed throughout the development process.
+                I won't overload you with tech jargon. I'll simply keep you informed of the project's practical progress.
               </p>
             </motion.div>
-            <motion.div variants={projectVariants} className="value-card glass-card">
-              <h3>💎 Premium Quality</h3>
+            <motion.div variants={projectVariants} className="value-card solid-card">
+              <h3>Code Quality</h3>
               <p className="text-secondary text-left">
-                I don't just write functional code. I craft highly responsive, secure, and beautiful applications that stand out in the modern web ecosystem.
+                I prioritize writing clean, readable, and well-structured code over fast hacks, making it easier to maintain.
               </p>
             </motion.div>
           </div>
