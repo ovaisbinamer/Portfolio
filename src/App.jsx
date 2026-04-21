@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import emailjs from '@emailjs/browser';
-import { motion, useSpring, useMotionValue, useTransform } from 'framer-motion';
+import { motion, useSpring, useMotionValue, useTransform, AnimatePresence } from 'framer-motion';
 import './App.css';
 
 
@@ -86,6 +86,8 @@ const formStagger = {
 function App() {
   const formRef = useRef();
   const [status, setStatus] = useState('');
+  const [activeTab, setActiveTab] = useState('experience');
+  const [activeFaq, setActiveFaq] = useState(null);
 
   const sendEmail = (e) => {
     e.preventDefault();
@@ -112,6 +114,16 @@ function App() {
 
   return (
     <div className="app-container">
+      <motion.div 
+        className="floating-status glass-card"
+        initial={{ y: 100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 1, type: "spring" }}
+      >
+        <span className="status-dot"></span>
+        Available for Freelance
+      </motion.div>
+
       <nav className="navbar container">
         <motion.div 
           initial={{ opacity: 0, x: -20 }}
@@ -241,6 +253,158 @@ function App() {
         </motion.section>
 
         <motion.section 
+          id="resume" 
+          className="section container"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={fadeInUp}
+        >
+          <h2 className="section-title">Resume</h2>
+          <div className="resume-container glass-card">
+            <div className="resume-tabs">
+              <button 
+                className={`tab-btn ${activeTab === 'experience' ? 'active' : ''}`}
+                onClick={() => setActiveTab('experience')}
+              >
+                Experience
+              </button>
+              <button 
+                className={`tab-btn ${activeTab === 'education' ? 'active' : ''}`}
+                onClick={() => setActiveTab('education')}
+              >
+                Education
+              </button>
+            </div>
+            <div className="resume-content">
+              <AnimatePresence mode="wait">
+                {activeTab === 'experience' && (
+                  <motion.div
+                    key="experience"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.3 }}
+                    className="resume-item"
+                  >
+                    <div className="resume-header">
+                      <h3>Freelance Full-Stack Developer</h3>
+                      <span className="accent-gradient date-badge">2023 - Present</span>
+                    </div>
+                    <p className="text-secondary text-left">
+                      Designed and built high-performance web applications using React, Next.js, and Node.js. 
+                      Collaborated with clients to deliver full-scale MVPs including E-Commerce platforms and SaaS tools. 
+                      Focused on responsive design, modern animations, and scalable backend architectures.
+                    </p>
+                  </motion.div>
+                )}
+                {activeTab === 'education' && (
+                  <motion.div
+                    key="education"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.3 }}
+                    className="resume-item"
+                  >
+                    <div className="resume-header">
+                      <h3>Bachelor of Science in Computer Science (BSCS)</h3>
+                      <span className="accent-gradient date-badge">Expected 2026</span>
+                    </div>
+                    <p className="text-primary text-left" style={{fontWeight: '600', marginBottom: '1rem'}}>Bahria University</p>
+                    <p className="text-secondary text-left">
+                      Core coursework in Data Structures, Algorithms, Web Development, and Software Engineering.
+                      Actively participating in coding hackathons and building practical side projects.
+                    </p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </div>
+        </motion.section>
+
+        <motion.section 
+          id="skills" 
+          className="section container"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+        >
+          <motion.h2 variants={fadeInUp} className="section-title">My Tech Stack</motion.h2>
+          <div className="skills-bento-grid">
+            <motion.div variants={projectVariants} className="bento-card glass-card">
+              <div className="bento-icon">💻</div>
+              <h3>Frontend</h3>
+              <p className="text-secondary text-sm">Building highly responsive, animated interfaces.</p>
+              <div className="bento-tags">
+                <span>React</span>
+                <span>Next.js 15</span>
+                <span>Tailwind CSS</span>
+                <span>Framer Motion</span>
+              </div>
+            </motion.div>
+            
+            <motion.div variants={projectVariants} className="bento-card glass-card">
+              <div className="bento-icon">⚙️</div>
+              <h3>Backend</h3>
+              <p className="text-secondary text-sm">Scalable logic and API development.</p>
+              <div className="bento-tags">
+                <span>Node.js</span>
+                <span>Express</span>
+                <span>Supabase</span>
+              </div>
+            </motion.div>
+            
+            <motion.div variants={projectVariants} className="bento-card glass-card span-2">
+              <div className="bento-icon">🗄️</div>
+              <h3>Databases & Architecture</h3>
+              <p className="text-secondary text-sm">Handling complex data modeling, secure payments, and reliable version control for production apps.</p>
+              <div className="bento-tags">
+                <span>MongoDB</span>
+                <span>PostgreSQL</span>
+                <span>Stripe</span>
+                <span>Git</span>
+              </div>
+            </motion.div>
+          </div>
+        </motion.section>
+
+        <motion.section 
+          id="services" 
+          className="section container"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+        >
+          <motion.h2 variants={fadeInUp} className="section-title">My Services</motion.h2>
+          <div className="services-grid">
+            <motion.div variants={projectVariants} className="service-card glass-card">
+              <div className="service-icon">💻</div>
+              <h3>Full-Stack Development</h3>
+              <p className="text-secondary text-left">
+                End-to-end web application development. From database architecture to beautiful frontend interfaces using modern stacks like Next.js and Node.
+              </p>
+            </motion.div>
+            <motion.div variants={projectVariants} className="service-card glass-card">
+              <div className="service-icon">🎨</div>
+              <h3>Modern UI/UX Design</h3>
+              <p className="text-secondary text-left">
+                Translating ideas into visually stunning, user-friendly designs. Implementing glassmorphism, smooth animations, and responsive layouts.
+              </p>
+            </motion.div>
+            <motion.div variants={projectVariants} className="service-card glass-card">
+              <div className="service-icon">⚙️</div>
+              <h3>API & Integration</h3>
+              <p className="text-secondary text-left">
+                Building robust RESTful APIs and seamlessly integrating third-party services like Stripe, Supabase, and real-time WebSockets.
+              </p>
+            </motion.div>
+          </div>
+        </motion.section>
+
+        <motion.section 
           id="projects" 
           className="section container"
           initial="hidden"
@@ -324,6 +488,43 @@ function App() {
               </div>
             </TiltCard>
             
+          </div>
+        </motion.section>
+
+        <motion.section 
+          id="values" 
+          className="section container"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={staggerContainer}
+        >
+          <motion.h2 variants={fadeInUp} className="section-title">Why Work With Me</motion.h2>
+          <div className="values-grid">
+            <motion.div variants={projectVariants} className="value-card glass-card">
+              <h3>🚀 Ready & Available</h3>
+              <p className="text-secondary text-left">
+                I am actively taking on new clients and freelance projects. Whether you need a full-scale MVP or a quick frontend overhaul, I'm ready to build.
+              </p>
+            </motion.div>
+            <motion.div variants={projectVariants} className="value-card glass-card">
+              <h3>⏱️ Timely & Punctual</h3>
+              <p className="text-secondary text-left">
+                I strictly value your time and deadlines. I set realistic timelines, communicate progress proactively, and consistently deliver on schedule.
+              </p>
+            </motion.div>
+            <motion.div variants={projectVariants} className="value-card glass-card">
+              <h3>💬 Clear Communication</h3>
+              <p className="text-secondary text-left">
+                Zero ghosting, zero tech jargon (unless you want it). I prioritize keeping you heavily involved and informed throughout the development process.
+              </p>
+            </motion.div>
+            <motion.div variants={projectVariants} className="value-card glass-card">
+              <h3>💎 Premium Quality</h3>
+              <p className="text-secondary text-left">
+                I don't just write functional code. I craft highly responsive, secure, and beautiful applications that stand out in the modern web ecosystem.
+              </p>
+            </motion.div>
           </div>
         </motion.section>
 
