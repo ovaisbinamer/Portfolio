@@ -337,7 +337,7 @@ function App() {
                 )}
               </AnimatePresence>
             </div>
-          </div>
+          </motion.div>
         </motion.section>
 
         <motion.section 
