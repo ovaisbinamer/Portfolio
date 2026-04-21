@@ -19,6 +19,7 @@
   --border-color: rgba(255, 255, 255, 0.1);
   --border-hover: rgba(255, 255, 255, 0.2);
   --card-bg: rgba(255, 255, 255, 0.03);
+  --nav-bg: rgba(10, 10, 10, 0.8);
 
   /* Typography */
   --font-sans: 'Inter', sans-serif;
@@ -44,6 +45,7 @@
   --border-color: rgba(0, 0, 0, 0.08);
   --border-hover: rgba(0, 0, 0, 0.15);
   --card-bg: rgba(255, 255, 255, 1);
+  --nav-bg: rgba(248, 250, 252, 0.8);
 }
 
 * {

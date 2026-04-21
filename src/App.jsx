@@ -252,13 +252,17 @@ function App() {
           variants={fadeInUp}
         >
           <h2 className="section-title">About Me</h2>
-          <div className="about-content solid-card">
+          <motion.div 
+            className="about-content solid-card"
+            whileHover={{ y: -4, boxShadow: '0 10px 40px -10px rgba(0,0,0,0.1)' }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+          >
             <p className="text-secondary text-center">
               I'm a BSCS student at Bahria University who loves building things for the web. 
               I work primarily with React and Node.js to create platforms that solve real problems. 
               Whether it's building a straightforward frontend or setting up a reliable backend database, I enjoy the entire development process.
             </p>
-          </div>
+          </motion.div>
         </motion.section>
 
         <motion.section 
@@ -270,7 +274,11 @@ function App() {
           variants={fadeInUp}
         >
           <h2 className="section-title">Resume</h2>
-          <div className="resume-container solid-card">
+          <motion.div 
+            className="resume-container solid-card"
+            whileHover={{ y: -4, boxShadow: '0 10px 40px -10px rgba(0,0,0,0.1)' }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+          >
             <div className="resume-tabs">
               <button 
                 className={`tab-btn ${activeTab === 'experience' ? 'active' : ''}`}
@@ -298,7 +306,7 @@ function App() {
                   >
                     <div className="resume-header">
                       <h3>Freelance Full-Stack Developer</h3>
-                      <span className="accent-gradient date-badge">2023 - Present</span>
+                      <span className="text-secondary" style={{fontWeight: 500, display: 'inline-block', marginTop: '0.4rem'}}>2023 - Present</span>
                     </div>
                     <p className="text-secondary text-left">
                       Built full-stack web applications using React, Next.js, and Node.js. 
@@ -318,7 +326,7 @@ function App() {
                   >
                     <div className="resume-header">
                       <h3>Bachelor of Science in Computer Science (BSCS)</h3>
-                      <span className="accent-gradient date-badge">Expected 2026</span>
+                      <span className="text-secondary" style={{fontWeight: 500, display: 'inline-block', marginTop: '0.4rem'}}>Expected 2026</span>
                     </div>
                     <p className="text-primary text-left" style={{fontWeight: '600', marginBottom: '1rem'}}>Bahria University</p>
                     <p className="text-secondary text-left">
@@ -342,7 +350,12 @@ function App() {
         >
           <motion.h2 variants={fadeInUp} className="section-title">My Tech Stack</motion.h2>
           <div className="skills-bento-grid">
-            <motion.div variants={projectVariants} className="bento-card solid-card">
+            <motion.div 
+              variants={projectVariants} 
+              className="bento-card solid-card"
+              whileHover={{ y: -5, scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            >
               <div className="bento-icon">💻</div>
               <h3>Frontend</h3>
               <p className="text-secondary text-sm">Building accessible and responsive user interfaces.</p>
@@ -354,7 +367,12 @@ function App() {
               </div>
             </motion.div>
             
-            <motion.div variants={projectVariants} className="bento-card solid-card">
+            <motion.div 
+              variants={projectVariants} 
+              className="bento-card solid-card"
+              whileHover={{ y: -5, scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            >
               <div className="bento-icon">⚙️</div>
               <h3>Backend</h3>
               <p className="text-secondary text-sm">Developing scalable logic and APIs.</p>
@@ -365,7 +383,12 @@ function App() {
               </div>
             </motion.div>
             
-            <motion.div variants={projectVariants} className="bento-card solid-card span-2">
+            <motion.div 
+              variants={projectVariants} 
+              className="bento-card solid-card span-2"
+              whileHover={{ y: -5, scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            >
               <div className="bento-icon">🗄️</div>
               <h3>Databases & Tools</h3>
               <p className="text-secondary text-sm">Handling data management and deployment workflows.</p>
@@ -389,21 +412,36 @@ function App() {
         >
           <motion.h2 variants={fadeInUp} className="section-title">My Services</motion.h2>
           <div className="services-grid">
-            <motion.div variants={projectVariants} className="service-card solid-card">
+            <motion.div 
+              variants={projectVariants} 
+              className="service-card solid-card"
+              whileHover={{ y: -5, scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            >
               <div className="service-icon">💻</div>
               <h3>Full-Stack Development</h3>
               <p className="text-secondary text-left">
                 Building web applications from the ground up using React and Node.js ecosystems.
               </p>
             </motion.div>
-            <motion.div variants={projectVariants} className="service-card solid-card">
+            <motion.div 
+              variants={projectVariants} 
+              className="service-card solid-card"
+              whileHover={{ y: -5, scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            >
               <div className="service-icon">🎨</div>
               <h3>Frontend Development</h3>
               <p className="text-secondary text-left">
                 Creating responsive, accessible, and fast user interfaces with modern CSS frameworks.
               </p>
             </motion.div>
-            <motion.div variants={projectVariants} className="service-card solid-card">
+            <motion.div 
+              variants={projectVariants} 
+              className="service-card solid-card"
+              whileHover={{ y: -5, scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            >
               <div className="service-icon">⚙️</div>
               <h3>Backend & APIs</h3>
               <p className="text-secondary text-left">
@@ -510,25 +548,45 @@ function App() {
         >
           <motion.h2 variants={fadeInUp} className="section-title">Why Work With Me</motion.h2>
           <div className="values-grid">
-            <motion.div variants={projectVariants} className="value-card solid-card">
+            <motion.div 
+              variants={projectVariants} 
+              className="value-card solid-card"
+              whileHover={{ y: -5, scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            >
               <h3>Availability</h3>
               <p className="text-secondary text-left">
                 I am currently taking on freelance projects and open to joining development teams.
               </p>
             </motion.div>
-            <motion.div variants={projectVariants} className="value-card solid-card">
+            <motion.div 
+              variants={projectVariants} 
+              className="value-card solid-card"
+              whileHover={{ y: -5, scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            >
               <h3>Punctuality</h3>
               <p className="text-secondary text-left">
                 I focus on realistic scheduling and tracking my time effectively to ensure deadlines are met.
               </p>
             </motion.div>
-            <motion.div variants={projectVariants} className="value-card solid-card">
+            <motion.div 
+              variants={projectVariants} 
+              className="value-card solid-card"
+              whileHover={{ y: -5, scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            >
               <h3>Communication</h3>
               <p className="text-secondary text-left">
                 I won't overload you with tech jargon. I'll simply keep you informed of the project's practical progress.
               </p>
             </motion.div>
-            <motion.div variants={projectVariants} className="value-card solid-card">
+            <motion.div 
+              variants={projectVariants} 
+              className="value-card solid-card"
+              whileHover={{ y: -5, scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            >
               <h3>Code Quality</h3>
               <p className="text-secondary text-left">
                 I prioritize writing clean, readable, and well-structured code over fast hacks, making it easier to maintain.
